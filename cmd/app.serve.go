@@ -8,15 +8,15 @@ import (
 	"github.com/go-kratos/kratos/v2/transport/http"
 	gorHdl "github.com/gorilla/handlers"
 	"go-service-payment-hexagonal/lib/config"
+	"go-service-payment-hexagonal/lib/datastore/mongodb"
 )
 
 // start service
 func startService(cfg *config.Config) {
-	_, err := initMongodb(cfg)
+	_, err := mongodb.NewMongodbInit(cfg).DbInit()
 	if err != nil {
 		log.Fatal("failed to close redis client: %v", err)
 	}
-
 	httpOpts := []http.ServerOption{
 		http.Timeout(cfg.Apps.Timeout),
 		http.Address(cfg.Apps.Address),
